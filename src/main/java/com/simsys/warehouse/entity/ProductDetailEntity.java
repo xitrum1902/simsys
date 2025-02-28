@@ -10,7 +10,7 @@ public class ProductDetailEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "productdetailid")
-    private Integer productDetailID;
+    private Integer productDetailId;
 
     @Column(name = "totalquantity")
     private Integer totalQuantity;
@@ -26,18 +26,18 @@ public class ProductDetailEntity {
     }
 
     public ProductDetailEntity(Integer productDetailID, Integer totalQuantity, ProductEntity product, List<ProductDetailVariantValueEntity> variantValues) {
-        this.productDetailID = productDetailID;
+        this.productDetailId = productDetailID;
         this.totalQuantity = totalQuantity;
         this.product = product;
         this.variantValues = variantValues;
     }
 
-    public Integer getProductDetailID() {
-        return productDetailID;
+    public Integer getProductDetailId() {
+        return productDetailId;
     }
 
-    public void setProductDetailID(Integer productDetailID) {
-        this.productDetailID = productDetailID;
+    public void setProductDetailId(Integer productDetailId) {
+        this.productDetailId = productDetailId;
     }
 
     public Integer getTotalQuantity() {
