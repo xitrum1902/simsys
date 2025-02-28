@@ -11,17 +11,27 @@ import java.util.List;
 @Repository
 public interface ProductDetailRepository extends JpaRepository<ProductDetailEntity, Integer> {
 
-    @Query("""
-        SELECT pd.productDetailID AS productDetailID, 
-               pd.totalQuantity AS totalQuantity,
-               v.name AS variantName,
-               vv.value AS variantValue
-        FROM ProductDetailEntity pd
-        JOIN pd.variantValues pdvv
-        JOIN pdvv.variantValue vv
-        JOIN vv.variant v
-        WHERE pd.totalQuantity < :quantityLimit
-        ORDER BY pd.productDetailID
-    """)
+    @Query(value = """
+    select 
+        pd.productdetailid as productDetailID,
+        pd.totalquantity as totalQuantity,
+        p.name as productName,
+        string_agg(distinct vv.value, ', ') 
+            filter (where v.name = 'color') as colorValues,
+        string_agg(distinct vv.value, ', ')
+            filter (where v.name = 'size') as sizeValues
+    from public.productdetail pd
+    join public.product p 
+        on pd.productid = p.productid
+    join public.productdetailvariantvalue pdvv 
+        on pd.productdetailid = pdvv.productdetailid
+    join public.variantvalue vv 
+        on pdvv.variantvalueid = vv.variantvalueid
+    join public.variant v 
+        on vv.variantid = v.variantid
+    where pd.totalquantity < :quantityLimit
+    group by pd.productdetailid, pd.totalquantity, p.name
+    """, nativeQuery = true)
     List<ProductDetailProjection> findProductDetailsWithVariants(@Param("quantityLimit") int quantityLimit);
+
 }

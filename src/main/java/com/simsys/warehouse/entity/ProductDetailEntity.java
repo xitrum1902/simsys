@@ -5,18 +5,18 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "ProductDetail")
+@Table(name = "productdetail")
 public class ProductDetailEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "\"ProductDetailID\"")
+    @Column(name = "productdetailid")
     private Integer productDetailID;
 
-    @Column(name = "TotalQuantity")
+    @Column(name = "totalquantity")
     private Integer totalQuantity;
 
     @ManyToOne
-    @JoinColumn(name = "ProductID", referencedColumnName = "productid")
+    @JoinColumn(name = "productid", referencedColumnName = "productid")
     private ProductEntity product;
 
     @OneToMany(mappedBy = "productDetail")

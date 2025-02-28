@@ -23,7 +23,8 @@ public class ProductDetailController {
 
     @GetMapping("/low-quantity")
     public List<ProductDetailProjection> getLowQuantityProducts(
-            @RequestParam(defaultValue = "10") int limit) {
+            @RequestParam(defaultValue = "20") int limit) {
         return productDetailService.getProductDetailsWithVariants(limit);
     }
+
 }

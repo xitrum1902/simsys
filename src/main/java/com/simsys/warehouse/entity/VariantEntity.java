@@ -3,14 +3,14 @@ package com.simsys.warehouse.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Variant")
+@Table(name = "variant")
 public class VariantEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "VariantID")
+    @Column(name = "variantid")
     private Integer variantID;
 
-    @Column(name = "Name")
+    @Column(name = "name")
     private String name;
 
     public VariantEntity(Integer variantID, String name) {
@@ -36,5 +36,4 @@ public class VariantEntity {
     public void setName(String name) {
         this.name = name;
     }
-
 }

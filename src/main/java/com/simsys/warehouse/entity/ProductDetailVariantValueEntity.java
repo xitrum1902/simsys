@@ -3,18 +3,18 @@ package com.simsys.warehouse.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "ProductDetailVariantValue")
+@Table(name = "productdetailvariantvalue")
 public class ProductDetailVariantValueEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "ProductDetailID", referencedColumnName = "ProductDetailID")
+    @JoinColumn(name = "productdetailid", referencedColumnName = "productdetailid")
     private ProductDetailEntity productDetail;
 
     @ManyToOne
-    @JoinColumn(name = "VariantValueID", referencedColumnName = "VariantValueID")
+    @JoinColumn(name = "variantvalueid", referencedColumnName = "variantvalueid")
     private VariantValueEntity variantValue;
 
     public ProductDetailVariantValueEntity(Integer id, ProductDetailEntity productDetail, VariantValueEntity variantValue) {
