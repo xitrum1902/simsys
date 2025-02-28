@@ -34,5 +34,4 @@ public class ScheduledTask {
             System.out.println("Tất cả sản phẩm đều có số lượng đủ (>= 30).");
         }
     }
-
 }

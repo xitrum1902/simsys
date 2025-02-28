@@ -7,7 +7,8 @@ import org.hibernate.metamodel.mapping.internal.GeneratedValuesProcessor;
 @Table(name = "product")
 public class ProductEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "productid")
     private int productid;
     @Column(nullable = false)
     private String name;
