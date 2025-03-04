@@ -14,7 +14,7 @@ public class VariantValueEntity {
     private String value;
 
     @ManyToOne
-    @JoinColumn(name = "variantid", referencedColumnName = "variantid")
+    @JoinColumn(name = "variantid")
     private VariantEntity variant;
 
     public VariantValueEntity() {

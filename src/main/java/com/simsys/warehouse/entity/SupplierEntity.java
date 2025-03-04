@@ -3,7 +3,6 @@ package com.simsys.warehouse.entity;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "supplier")
@@ -12,7 +11,7 @@ public class SupplierEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "supplierid")
-    private Integer supplierID;
+    private Integer supplierId;
 
     @Column(name = "name", length = 255)
     private String name;
@@ -23,7 +22,7 @@ public class SupplierEntity {
     @Column(name = "email", length = 255)
     private String email;
 
-    @Column(name = "address")
+    @Column(name = "address", columnDefinition = "TEXT")
     private String address;
 
     @Column(name = "createddate")
@@ -36,20 +35,15 @@ public class SupplierEntity {
     private BigDecimal rating;
 
     @ManyToOne
-    @JoinColumn(name = "userid", referencedColumnName = "userID")
+    @JoinColumn(name = "userid", nullable = false)
     private UserEntity user;
 
-    @OneToMany(mappedBy = "supplier")
-    private List<RequestOrderEntity> requestOrders;
-
-    // Constructors, Getters và Setters
-
+    // Constructors
     public SupplierEntity() {
     }
 
-    public SupplierEntity(Integer supplierID, String name, String phone, String email, String address,
-                          LocalDate createdDate, LocalDate updatedDate, BigDecimal rating, UserEntity user) {
-        this.supplierID = supplierID;
+    public SupplierEntity(Integer supplierId, String name, String phone, String email, String address, LocalDate createdDate, LocalDate updatedDate, BigDecimal rating, UserEntity user) {
+        this.supplierId = supplierId;
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -60,12 +54,13 @@ public class SupplierEntity {
         this.user = user;
     }
 
-    public Integer getSupplierID() {
-        return supplierID;
+    // Getters and Setters
+    public Integer getSupplierId() {
+        return supplierId;
     }
 
-    public void setSupplierID(Integer supplierID) {
-        this.supplierID = supplierID;
+    public void setSupplierId(Integer supplierId) {
+        this.supplierId = supplierId;
     }
 
     public String getName() {
@@ -130,13 +125,5 @@ public class SupplierEntity {
 
     public void setUser(UserEntity user) {
         this.user = user;
-    }
-
-    public List<RequestOrderEntity> getRequestOrders() {
-        return requestOrders;
-    }
-
-    public void setRequestOrders(List<RequestOrderEntity> requestOrders) {
-        this.requestOrders = requestOrders;
     }
 }

@@ -16,7 +16,7 @@ public class ProductDetailEntity {
     private Integer totalQuantity;
 
     @ManyToOne
-    @JoinColumn(name = "productid", referencedColumnName = "productid")
+    @JoinColumn(name = "productid")
     private ProductEntity product;
 
     @OneToMany(mappedBy = "productDetail")

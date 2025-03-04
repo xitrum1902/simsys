@@ -2,7 +2,6 @@ package com.simsys.warehouse.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -11,18 +10,18 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "userid")
-    private Integer userID;
+    private Integer userId;
 
-    @Column(name = "username", length = 255, nullable = false)
+    @Column(name = "username", length = 255, nullable = false, unique = true)
     private String username;
 
     @Column(name = "password", length = 255, nullable = false)
     private String password;
 
-    @Column(name = "email", length = 255)
+    @Column(name = "email", length = 255, unique = true)
     private String email;
 
-    @Column(name = "contactinfo")
+    @Column(name = "contactinfo", columnDefinition = "TEXT")
     private String contactInfo;
 
     @Column(name = "createddate")
@@ -32,23 +31,15 @@ public class UserEntity {
     private Boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "roleid", referencedColumnName = "roleID")
+    @JoinColumn(name = "roleid", nullable = false)
     private RoleEntity role;
 
-    @OneToMany(mappedBy = "user")
-    private List<SupplierEntity> suppliers;
-
-    @OneToMany(mappedBy = "user")
-    private List<RequestOrderEntity> requestOrders;
-
-    // Constructors, Getters và Setters
-
+    // Constructors
     public UserEntity() {
     }
 
-    public UserEntity(Integer userID, String username, String password, String email, String contactInfo,
-                      LocalDate createdDate, Boolean status, RoleEntity role) {
-        this.userID = userID;
+    public UserEntity(Integer userId, String username, String password, String email, String contactInfo, LocalDate createdDate, Boolean status, RoleEntity role) {
+        this.userId = userId;
         this.username = username;
         this.password = password;
         this.email = email;
@@ -58,12 +49,13 @@ public class UserEntity {
         this.role = role;
     }
 
-    public Integer getUserID() {
-        return userID;
+    // Getters and Setters
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUserID(Integer userID) {
-        this.userID = userID;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -120,21 +112,5 @@ public class UserEntity {
 
     public void setRole(RoleEntity role) {
         this.role = role;
-    }
-
-    public List<SupplierEntity> getSuppliers() {
-        return suppliers;
-    }
-
-    public void setSuppliers(List<SupplierEntity> suppliers) {
-        this.suppliers = suppliers;
-    }
-
-    public List<RequestOrderEntity> getRequestOrders() {
-        return requestOrders;
-    }
-
-    public void setRequestOrders(List<RequestOrderEntity> requestOrders) {
-        this.requestOrders = requestOrders;
     }
 }

@@ -1,6 +1,5 @@
 package com.simsys.warehouse.service;
 
-import com.simsys.warehouse.entity.ProductEntity;
 import com.simsys.warehouse.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +13,12 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<ProductEntity> getAllProducts() {
-        return productRepository.findAll();
-    }
-
-    public List<ProductEntity> getLowStockProducts(int minStock) {
-        return productRepository.findByQuantityLessThan(minStock);
-    }
+//    public List<ProductEntity> getAllProducts() {
+//        return productRepository.findAll();
+//    }
+//
+//    public List<ProductEntity> getLowStockProducts(int minStock) {
+//        return productRepository.findByQuantityLessThan(minStock);
+//    }
 
 }

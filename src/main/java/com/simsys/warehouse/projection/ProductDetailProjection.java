@@ -1,7 +1,7 @@
 package com.simsys.warehouse.projection;
 
 public interface ProductDetailProjection {
-    Integer getProductDetailID();
+    Integer getProductDetailId();
 
     Integer getTotalQuantity();
 

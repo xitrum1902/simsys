@@ -10,12 +10,12 @@ public class RoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "roleid")
-    private Integer roleID;
+    private Integer roleId;
 
-    @Column(name = "rolename", length = 255)
+    @Column(name = "rolename", length = 255, nullable = false, unique = true)
     private String roleName;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @OneToMany(mappedBy = "role")
@@ -25,19 +25,20 @@ public class RoleEntity {
     public RoleEntity() {
     }
 
-    public RoleEntity(Integer roleID, String roleName, String description) {
-        this.roleID = roleID;
+    public RoleEntity(Integer roleId, String roleName, String description, List<UserEntity> users) {
+        this.roleId = roleId;
         this.roleName = roleName;
         this.description = description;
+        this.users = users;
     }
 
-    // Getters và Setters
-    public Integer getRoleID() {
-        return roleID;
+    // Getters and Setters
+    public Integer getRoleId() {
+        return roleId;
     }
 
-    public void setRoleID(Integer roleID) {
-        this.roleID = roleID;
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 
     public String getRoleName() {

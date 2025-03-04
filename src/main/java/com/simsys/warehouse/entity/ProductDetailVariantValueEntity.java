@@ -10,11 +10,11 @@ public class ProductDetailVariantValueEntity {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "productdetailid", referencedColumnName = "productdetailid")
+    @JoinColumn(name = "productdetailid")
     private ProductDetailEntity productDetail;
 
     @ManyToOne
-    @JoinColumn(name = "variantvalueid", referencedColumnName = "variantvalueid")
+    @JoinColumn(name = "variantvalueid")
     private VariantValueEntity variantValue;
 
     public ProductDetailVariantValueEntity(Integer id, ProductDetailEntity productDetail, VariantValueEntity variantValue) {

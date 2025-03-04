@@ -1,7 +1,6 @@
 package com.simsys.warehouse.entity;
 
 import jakarta.persistence.*;
-import org.hibernate.metamodel.mapping.internal.GeneratedValuesProcessor;
 
 @Entity
 @Table(name = "product")

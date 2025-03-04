@@ -25,6 +25,7 @@ public class ProductDetailController {
     public List<ProductDetailProjection> getLowQuantityProducts(
             @RequestParam(defaultValue = "20") int limit) {
         return productDetailService.getProductDetailsWithVariants(limit);
+
     }
 
 }

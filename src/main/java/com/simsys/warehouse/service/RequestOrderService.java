@@ -1,45 +1,71 @@
 package com.simsys.warehouse.service;
 
+import com.simsys.warehouse.dto.RequestOrderDTO;
 import com.simsys.warehouse.entity.ProductDetailEntity;
 import com.simsys.warehouse.entity.RequestOrderEntity;
-import com.simsys.warehouse.projection.ProductDetailProjection;
+import com.simsys.warehouse.entity.SupplierEntity;
+import com.simsys.warehouse.entity.UserEntity;
 import com.simsys.warehouse.repository.ProductDetailRepository;
 import com.simsys.warehouse.repository.RequestOrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.simsys.warehouse.repository.SupplierRepository;
+import com.simsys.warehouse.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RequestOrderService {
 
-    @Autowired
-    private ProductDetailRepository productDetailRepository;
+    private final RequestOrderRepository requestOrderRepository;
+    private final ProductDetailRepository productDetailRepository;
+    private final SupplierRepository supplierRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private RequestOrderRepository requestOrderRepository;
+    public RequestOrderService(RequestOrderRepository requestOrderRepository,
+                               ProductDetailRepository productDetailRepository,
+                               SupplierRepository supplierRepository,
+                               UserRepository userRepository) {
+        this.requestOrderRepository = requestOrderRepository;
+        this.productDetailRepository = productDetailRepository;
+        this.supplierRepository = supplierRepository;
+        this.userRepository = userRepository;
+    }
 
     @Transactional
-    public void createRequestOrdersForLowStock(int threshold) {
-        List<ProductDetailProjection> lowStockProducts = productDetailRepository.findProductDetailsWithVariants(10);
+    public void createRequestOrders(List<RequestOrderDTO> requestOrderDTOs, Integer supplierId, Integer userId) {
+        Optional<SupplierEntity> supplierOpt = supplierRepository.findById(supplierId);
+        Optional<UserEntity> userOpt = userRepository.findById(userId);
 
-        for (ProductDetailProjection productProjection : lowStockProducts) {
-            ProductDetailEntity productDetail = new ProductDetailEntity();
-            productDetail.setProductDetailId(productProjection.getProductDetailID());
-            RequestOrderEntity requestOrder = new RequestOrderEntity();
-            requestOrder.setProductDetail(productDetail);
-            requestOrder.setQuantity(20); // Số lượng đặt hàng
-            requestOrder.setCostPrice(new BigDecimal("100")); // Giá costprice giả định
-            requestOrder.setTotalAmount(new BigDecimal("2000")); // Tổng số tiền
-            requestOrder.setStatus(false); // Đặt hàng mới, chưa xử lý
-            requestOrder.setOrderDate(LocalDate.now());
-            requestOrder.setCreateDate(LocalDate.now());
-            requestOrder.setDescription("Đặt hàng tự động do tồn kho thấp");
+        if (supplierOpt.isEmpty() || userOpt.isEmpty()) {
+            throw new RuntimeException("Supplier or User not found");
+        }
 
-            requestOrderRepository.save(requestOrder);
+        SupplierEntity supplier = supplierOpt.get();
+        UserEntity user = userOpt.get();
+
+        for (RequestOrderDTO dto : requestOrderDTOs) {
+            Optional<ProductDetailEntity> productDetailOpt = productDetailRepository.findById(dto.getProductDetailId());
+
+            if (productDetailOpt.isPresent()) {
+                ProductDetailEntity productDetail = productDetailOpt.get();
+
+                RequestOrderEntity requestOrder = new RequestOrderEntity();
+                requestOrder.setProductDetail(productDetail);
+                requestOrder.setSupplier(supplier);
+                requestOrder.setUser(user);
+                requestOrder.setQuantity(dto.getTotalQuantity());
+                requestOrder.setCostPrice(BigDecimal.valueOf(100)); // Giá nhập (có thể tính toán sau)
+                requestOrder.setTotalAmount(requestOrder.getCostPrice().multiply(BigDecimal.valueOf(dto.getTotalQuantity())));
+                requestOrder.setStatus(false); // Chưa duyệt
+                requestOrder.setOrderDate(LocalDate.now());
+                requestOrder.setCreateDate(LocalDate.now());
+                requestOrder.setDescription("Auto-generated request order for " + dto.getProductName());
+
+                requestOrderRepository.save(requestOrder);
+            }
         }
     }
 }
