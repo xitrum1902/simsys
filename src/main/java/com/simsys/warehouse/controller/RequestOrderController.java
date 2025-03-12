@@ -19,11 +19,17 @@ public class RequestOrderController {
     }
     @PostMapping("/create")
     public ResponseEntity<List<RequestOrderDTO>> createRequestOrder(@RequestParam int lowerBound) {
-        List<RequestOrderDTO> savedOrders = requestOrderService.createRequestOrdersFromVariants(20,1, 2);
-
+        List<RequestOrderDTO> savedOrders = requestOrderService.createRequestOrdersFromVariants(20,1, 2, 100);
         if (savedOrders.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOrders);
     }
+
+    @PostMapping("/create-request-order")
+    public ResponseEntity<List<RequestOrderDTO>> createRequestOrder(@RequestBody RequestOrderDTO requestDto) {
+        List<RequestOrderDTO> savedOrders = requestOrderService.createRequestOrder(requestDto);
+        return ResponseEntity.ok(savedOrders);
+    }
+
 }

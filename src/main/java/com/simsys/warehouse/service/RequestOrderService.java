@@ -36,7 +36,7 @@ public class RequestOrderService {
     }
 
     @Transactional
-    public List<RequestOrderDTO> createRequestOrdersFromVariants(int lowerBound, Integer supplierId, Integer userId) {
+    public List<RequestOrderDTO> createRequestOrdersFromVariants(int lowerBound, Integer supplierId, Integer userId, int totalquantity) {
         Optional<SupplierEntity> supplierOpt = supplierService.findSupplierById(supplierId);
         Optional<UserEntity> userOpt = userService.findById(userId);
 
@@ -49,7 +49,6 @@ public class RequestOrderService {
 
         List<ProductDetailProjection> productDetails = productDetailService.getProductDetailsWithVariants(lowerBound);
 
-        // Chuyển đổi ProductDetailProjection thành RequestOrderDTO
         List<RequestOrderDTO> requestOrderDTOs = productDetails.stream().map(detail -> {
             RequestOrderDTO dto = new RequestOrderDTO();
             dto.setProductDetailId(detail.getProductDetailId());
@@ -63,7 +62,7 @@ public class RequestOrderService {
         List<RequestOrderDTO> createdOrders = new ArrayList<>();
 
         for (RequestOrderDTO dto : requestOrderDTOs) {
-            Optional<ProductDetailEntity> productDetailOpt = productDetailRepository.findById(dto.getProductDetailId());
+            Optional<ProductDetailEntity> productDetailOpt = productDetailService.findById(dto.getProductDetailId());
 
             if (productDetailOpt.isPresent()) {
                 ProductDetailEntity productDetail = productDetailOpt.get();
@@ -71,7 +70,7 @@ public class RequestOrderService {
                 requestOrder.setProductDetail(productDetail);
                 requestOrder.setSupplier(supplier);
                 requestOrder.setUser(user);
-                requestOrder.setQuantity(dto.getTotalQuantity());
+                requestOrder.setQuantity(totalquantity);
                 requestOrder.setCostPrice(BigDecimal.valueOf(100));
                 requestOrder.setTotalAmount(requestOrder.getCostPrice().multiply(BigDecimal.valueOf(dto.getTotalQuantity())));
                 requestOrder.setStatus(false);
@@ -103,6 +102,56 @@ public class RequestOrderService {
     }
 
 
+    public List<RequestOrderDTO> createRequestOrder(RequestOrderDTO requestDto) {
+        List<RequestOrderDTO> createdOrders = new ArrayList<>();
 
+        SupplierEntity supplier = supplierService.findSupplierById(requestDto.getSupplierId())
+                .orElseThrow(() -> new RuntimeException("Supplier not found"));
 
+        // Tìm User
+        UserEntity user = userService.findById(requestDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Tìm Product Detail
+        ProductDetailEntity productDetail = productDetailService.findById(requestDto.getProductDetailId())
+                .orElseThrow(() -> new RuntimeException("Product detail not found"));
+
+        // Tạo Request Order Entity
+        RequestOrderEntity requestOrder = new RequestOrderEntity();
+        requestOrder.setProductDetail(productDetail);
+        requestOrder.setSupplier(supplier);
+        requestOrder.setUser(user);
+        requestOrder.setQuantity(requestDto.getTotalQuantity());
+        requestOrder.setCostPrice(BigDecimal.valueOf(100));
+        requestOrder.setTotalAmount(requestOrder.getCostPrice().multiply(BigDecimal.valueOf(requestDto.getTotalQuantity())));
+        requestOrder.setStatus(false);
+        requestOrder.setOrderDate(LocalDate.now());
+        requestOrder.setCreateDate(LocalDate.now());
+        requestOrder.setDescription("Request Order for " + requestDto.getProductName());
+
+        //  Lưu vào database
+        RequestOrderEntity savedOrder = requestOrderRepository.save(requestOrder);
+
+        // Chuyển thành DTO để trả về
+        createdOrders.add(mapToDTO(savedOrder));
+
+        return createdOrders;
+    }
+
+    // Mapping từ Entity → DTO
+    private RequestOrderDTO mapToDTO(RequestOrderEntity order) {
+        RequestOrderDTO dto = new RequestOrderDTO();
+        dto.setRequestOrderId(order.getRequestOrderId());
+        dto.setProductDetailId(order.getProductDetail().getProductDetailId());
+        dto.setTotalQuantity(order.getQuantity());
+        dto.setProductName(order.getProductDetail().getProduct().getName());
+        dto.setSupplierId(order.getSupplier().getSupplierId());
+        dto.setUserId(order.getUser().getUserId());
+        dto.setCostPrice(order.getCostPrice());
+        dto.setTotalAmount(order.getTotalAmount());
+        dto.setStatus(order.getStatus());
+        dto.setOrderDate(order.getOrderDate());
+        dto.setCreateDate(order.getCreateDate());
+        return dto;
+    }
 }

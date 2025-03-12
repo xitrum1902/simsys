@@ -1,5 +1,6 @@
 package com.simsys.warehouse.service;
 
+import com.simsys.warehouse.dto.RequestOrderDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,13 @@ public class ScheduledTask {
     @Autowired
     private ProductService productService;
 
-//    @Scheduled(cron = "0 0 0 * * ?")
+    private final RequestOrderService requestOrderService;
+
+    public ScheduledTask(RequestOrderService requestOrderService) {
+        this.requestOrderService = requestOrderService;
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?")
     /**
      "0 0 0 * * ?":
      0 giây
@@ -22,15 +29,14 @@ public class ScheduledTask {
      * mỗi tháng
      ? bất kỳ ngày trong tuần
      **/
-//    public void runDailyTask() {
-//        List<ProductEntity> lowStockProducts = productService.getLowStockProducts(30);
-//        if (!lowStockProducts.isEmpty()) {
-//            System.out.println("Những sản phẩm có số lượng dưới 30:");
-//            lowStockProducts.forEach(System.out::println);
-//
-//            System.out.println("Gợi ý: Vui lòng nhập thêm hàng cho các sản phẩm trên.");
-//        } else {
-//            System.out.println("Tất cả sản phẩm đều có số lượng đủ (>= 30).");
-//        }
-//    }
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void autoCreateDailyRequestOrders() {
+        int supplierId = 1;  // Hoặc lấy từ cấu hình
+        int userId = 2;
+        int limit = 20;
+        int totalquantity = 100;
+
+        List<RequestOrderDTO> createdOrders = requestOrderService.createRequestOrdersFromVariants(limit, supplierId, userId,totalquantity);
+    }
+
 }
