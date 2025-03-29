@@ -1,6 +1,6 @@
 package com.simsys.warehouse.service;
 
-import com.simsys.warehouse.dto.RequestOrderDTO;
+import com.simsys.warehouse.dto.RequestPurchaseOrderDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -13,9 +13,9 @@ public class ScheduledTask {
     @Autowired
     private ProductService productService;
 
-    private final RequestOrderService requestOrderService;
+    private final RequestPurchaseOrderService requestOrderService;
 
-    public ScheduledTask(RequestOrderService requestOrderService) {
+    public ScheduledTask(RequestPurchaseOrderService requestOrderService) {
         this.requestOrderService = requestOrderService;
     }
 
@@ -36,7 +36,7 @@ public class ScheduledTask {
         int limit = 20;
         int totalquantity = 100;
 
-        List<RequestOrderDTO> createdOrders = requestOrderService.createRequestOrdersFromVariants(limit, supplierId, userId,totalquantity);
+        List<RequestPurchaseOrderDTO> createdOrders = requestOrderService.createListRequestPurchaseOrdersFromVariants(limit, supplierId, userId,totalquantity);
     }
 
 }

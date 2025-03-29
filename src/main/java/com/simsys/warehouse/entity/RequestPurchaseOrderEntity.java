@@ -1,13 +1,13 @@
 package com.simsys.warehouse.entity;
 
 import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
-@Table(name = "requestorder")
-public class RequestOrderEntity {
+@Table(name = "requestpurchaseorder")
+public class RequestPurchaseOrderEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +36,10 @@ public class RequestOrderEntity {
     private BigDecimal totalAmount;
 
     @Column(name = "status")
-    private Boolean status;
+    private String status;
+
+    @Column(name = "isenable")
+    private Boolean isEnable;
 
     @Column(name = "orderdate")
     @Temporal(TemporalType.DATE)
@@ -49,16 +52,21 @@ public class RequestOrderEntity {
     @Column(name = "note", columnDefinition = "TEXT")
     private String note;
 
+    @Column(name = "size", columnDefinition = "TEXT")
+    private String size;
+
+    @Column(name = "color", columnDefinition = "TEXT")
+    private String color;
+
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     // Constructors
-    public RequestOrderEntity() {
+    public RequestPurchaseOrderEntity() {
     }
 
-    public RequestOrderEntity(SupplierEntity supplier, ProductDetailEntity productDetail, UserEntity user,
-                              Integer quantity, BigDecimal costPrice, BigDecimal totalAmount, Boolean status,
-                              LocalDate orderDate, LocalDate createDate, String note, String description) {
+    public RequestPurchaseOrderEntity(Integer requestOrderId, SupplierEntity supplier, ProductDetailEntity productDetail, UserEntity user, Integer quantity, BigDecimal costPrice, BigDecimal totalAmount, String status,Boolean isEnable, LocalDate orderDate, LocalDate createDate, String note, String size, String color, String description) {
+        this.requestOrderId = requestOrderId;
         this.supplier = supplier;
         this.productDetail = productDetail;
         this.user = user;
@@ -66,9 +74,12 @@ public class RequestOrderEntity {
         this.costPrice = costPrice;
         this.totalAmount = totalAmount;
         this.status = status;
+        this.isEnable = isEnable;
         this.orderDate = orderDate;
         this.createDate = createDate;
         this.note = note;
+        this.size = size;
+        this.color = color;
         this.description = description;
     }
 
@@ -129,11 +140,11 @@ public class RequestOrderEntity {
         this.totalAmount = totalAmount;
     }
 
-    public Boolean getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -167,5 +178,29 @@ public class RequestOrderEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Boolean getEnable() {
+        return isEnable;
+    }
+
+    public void setEnable(Boolean enable) {
+        isEnable = enable;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }
