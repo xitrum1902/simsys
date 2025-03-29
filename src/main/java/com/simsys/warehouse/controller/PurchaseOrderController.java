@@ -2,6 +2,7 @@ package com.simsys.warehouse.controller;
 
 import com.simsys.warehouse.dto.PurchaseOrderDTO;
 import com.simsys.warehouse.service.PurchaseOrderService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/purchase-orders")
+@Tag(name = "Purchase Orders")
 public class PurchaseOrderController {
 
     private final PurchaseOrderService purchaseOrderService;
