@@ -16,7 +16,6 @@ public class ProductDetailVariantValueMapper {
     public static ProductDetailVariantValueEntity toEntity(ProductDetailVariantValueDTO dto) {
         ProductDetailVariantValueEntity entity = new ProductDetailVariantValueEntity();
         entity.setId(dto.getId());
-        // Associations (productDetail and variantValue) should be set in the service layer
         return entity;
     }
 }

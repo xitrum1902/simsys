@@ -6,33 +6,24 @@ import jakarta.persistence.*;
 @Table(name = "productdetailvariantvalue")
 public class ProductDetailVariantValueEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Tự động tăng
+    @Column(name = "id", nullable = false)
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "productdetailid")
+    @JoinColumn(name = "productdetailid", nullable = false)
     private ProductDetailEntity productDetail;
 
     @ManyToOne
-    @JoinColumn(name = "variantvalueid")
+    @JoinColumn(name = "variantvalueid", nullable = false)
     private VariantValueEntity variantValue;
+
+    public ProductDetailVariantValueEntity() {}
 
     public ProductDetailVariantValueEntity(Integer id, ProductDetailEntity productDetail, VariantValueEntity variantValue) {
         this.id = id;
         this.productDetail = productDetail;
         this.variantValue = variantValue;
-    }
-
-    public ProductDetailVariantValueEntity() {
-    }
-
-    @Override
-    public String toString() {
-        return "ProductDetailVariantValueEntity{" +
-                "id=" + id +
-                ", productDetail=" + productDetail +
-                ", variantValue=" + variantValue +
-                '}';
     }
 
     public Integer getId() {
@@ -57,5 +48,14 @@ public class ProductDetailVariantValueEntity {
 
     public void setVariantValue(VariantValueEntity variantValue) {
         this.variantValue = variantValue;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductDetailVariantValueEntity{" +
+                "id=" + id +
+                ", productDetail=" + productDetail +
+                ", variantValue=" + variantValue +
+                '}';
     }
 }
